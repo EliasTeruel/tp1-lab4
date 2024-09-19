@@ -1,0 +1,1 @@
+export const environmetConfig = {"projectId":"tp-1-7445a","appId":"1:480239661424:web:d55b3fcfe8104cf7071fb5","storageBucket":"tp-1-7445a.appspot.com","apiKey":"AIzaSyCEzw7wWi5hm9pIKj0t4UX95ERk8cKVL5s","authDomain":"tp-1-7445a.firebaseapp.com","messagingSenderId":"480239661424"};

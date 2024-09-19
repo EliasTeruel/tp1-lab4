@@ -1,0 +1,85 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 login-box">
+      <h1 class="text-center text-primary">Registrar usuario</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="Register()">
+        <div class="form-group">
+          <input
+            formControlName="firstName"
+            class="form-control my-2"
+            placeholder="Nombre"
+          />
+          <input
+            formControlName="lastName"
+            class="form-control my-2"
+            placeholder="Apellido"
+          />
+          <input
+            formControlName="newUserMail"
+            [(ngModel)]="newUserMail"
+            class="form-control my-2"
+            [class.is-invalid]="
+              userMail?.invalid && (userMail?.dirty || userMail?.touched)
+            "
+            placeholder="Correo electrónico"
+          />
+          <div
+            *ngIf="userMail?.invalid && (userMail?.dirty || userMail?.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="userMail?.errors?.['required']">
+              El correo electrónico es obligatorio.
+            </div>
+            <div *ngIf="userMail?.errors?.['email']">
+              Ingrese un correo electrónico válido.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            formControlName="newUserPWD"
+            type="password"
+            class="form-control my-2"
+            [class.is-invalid]="
+              userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)
+            "
+            placeholder="Contraseña"
+          />
+          <div
+            *ngIf="userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="userPWD?.errors?.['required']">
+              La contraseña es obligatoria.
+            </div>
+            <div *ngIf="userPWD?.errors?.['minlength']">
+              La contraseña debe tener al menos 6 caracteres.
+            </div>
+          </div>
+        </div>
+        <div class="d-grid gap-2">
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid"
+            class="btn btn-primary"
+          >
+            Registrar
+          </button>
+          <div *ngIf="loggedUser !== ''">
+            <h2 class="text-center text-primary">
+              Usuario registrado: {{ loggedUser }}
+            </h2>
+          </div>
+          <div *ngIf="isLoading" class="text-center mt-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+          <div *ngIf="flagError">
+            <p class="text-center text-primary">{{ msjError }}</p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

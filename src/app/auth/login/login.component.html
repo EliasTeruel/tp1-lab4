@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 login-box">
+      <h1 class="text-center text-primary">Ingresar Usuario</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="Login()">
+
+        <div class="form-group">
+          <input
+            formControlName="userName"
+            class="form-control my-2"
+            [class.is-invalid]="userName?.invalid && (userName?.dirty || userName?.touched)"
+            placeholder="Nombre de usuario"
+            (blur)="autoCompleteUser()" 
+            
+          />
+          <div
+            *ngIf="userName?.invalid && (userName?.dirty || userName?.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="userName?.errors?.['required']">
+              El nombre de usuario es obligatorio.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            formControlName="userMail"
+            class="form-control my-2"
+            [class.is-invalid]="
+              userMail?.invalid && (userMail?.dirty || userMail?.touched)
+            "
+            placeholder="Correo electrónico"
+          />
+          <div
+            *ngIf="userMail?.invalid && (userMail?.dirty || userMail?.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="userMail?.errors?.['required']">
+              El correo electrónico es obligatorio.
+            </div>
+            <div *ngIf="userMail?.errors?.['email']">
+              Ingrese un correo electrónico válido.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            formControlName="userPWD"
+            type="password"
+            class="form-control my-2"
+            [class.is-invalid]="
+              userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)
+            "
+            placeholder="Contraseña"
+          />
+          <div
+            *ngIf="userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="userPWD?.errors?.['required']">
+              La contraseña es obligatoria.
+            </div>
+          </div>
+        </div>
+        <div class="d-grid gap-2">
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid"
+            class="btn btn-primary"
+          >
+            Iniciar Sesión
+          </button>
+        </div>
+        <div *ngIf="userNotFound" class="text-center mt-3">
+          <p>El usuario no existe. ¿Deseas registrarte?</p>
+          <button (click)="Register()" class="btn btn-success">
+            Registrarse
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
