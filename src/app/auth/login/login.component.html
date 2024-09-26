@@ -6,30 +6,13 @@
 
         <div class="form-group">
           <input
-            formControlName="userName"
-            class="form-control my-2"
-            [class.is-invalid]="userName?.invalid && (userName?.dirty || userName?.touched)"
-            placeholder="Nombre de usuario"
-            (blur)="autoCompleteUser()" 
-            
-          />
-          <div
-            *ngIf="userName?.invalid && (userName?.dirty || userName?.touched)"
-            class="invalid-feedback"
-          >
-            <div *ngIf="userName?.errors?.['required']">
-              El nombre de usuario es obligatorio.
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <input
             formControlName="userMail"
             class="form-control my-2"
             [class.is-invalid]="
               userMail?.invalid && (userMail?.dirty || userMail?.touched)
             "
             placeholder="Correo electrónico"
+            (input)="checkIfUserExists()"
           />
           <div
             *ngIf="userMail?.invalid && (userMail?.dirty || userMail?.touched)"
@@ -41,8 +24,10 @@
             <div *ngIf="userMail?.errors?.['email']">
               Ingrese un correo electrónico válido.
             </div>
+            
           </div>
         </div>
+
         <div class="form-group">
           <input
             formControlName="userPWD"
@@ -62,20 +47,43 @@
             </div>
           </div>
         </div>
+        <div *ngIf="errorMessage" class="text-danger text-center mt-2">
+          <p>{{ errorMessage }}</p>
+        </div>
+
         <div class="d-grid gap-2">
           <button
             type="submit"
-            [disabled]="loginForm.invalid"
+            [disabled]="loginForm.invalid || userNotFound"
             class="btn btn-primary"
           >
             Iniciar Sesión
           </button>
         </div>
-        <div *ngIf="userNotFound" class="text-center mt-3">
-          <p>El usuario no existe. ¿Deseas registrarte?</p>
-          <button (click)="Register()" class="btn btn-success">
+
+        <div class="d-grid gap-2 mt-2">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="quickLogin()"
+          >
+            Ingreso Rápido
+          </button>
+        </div>
+
+        <div class="d-grid gap-2 mt-2">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="Register()"
+            [disabled]="!showRegisterButton"
+          >
             Registrarse
           </button>
+        </div>
+
+        <div *ngIf="userNotFound && userMail?.dirty && userMail?.valid" class="text-center mt-3">
+          <p>El correo ingresado no está registrado. ¿Deseas registrarte?</p>
         </div>
       </form>
     </div>

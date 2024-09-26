@@ -8,7 +8,7 @@ describe('AhorcadoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AhorcadoComponent]
+      imports: [AhorcadoComponent]
     })
     .compileComponents();
 

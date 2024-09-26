@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MayorOMenorComponent } from './mayor-o-menor.component';
+import { Juego2048Component } from './juego2048.component';
 
-describe('MayorOMenorComponent', () => {
-  let component: MayorOMenorComponent;
-  let fixture: ComponentFixture<MayorOMenorComponent>;
+describe('Juego2048Component', () => {
+  let component: Juego2048Component;
+  let fixture: ComponentFixture<Juego2048Component>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MayorOMenorComponent]
+      imports: [Juego2048Component]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MayorOMenorComponent);
+    fixture = TestBed.createComponent(Juego2048Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

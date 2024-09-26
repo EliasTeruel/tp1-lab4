@@ -22,6 +22,8 @@ export class LoginComponent {
   isLoggedIn: boolean = false;
   loginForm: FormGroup;
   userNotFound: boolean = false;
+  showRegisterButton: boolean = false;
+  errorMessage: string = '';
 
   constructor(public auth: Auth,
     private firestore: Firestore,
@@ -31,16 +33,12 @@ export class LoginComponent {
     private fb: FormBuilder) {
 
     this.loginForm = this.fb.group({
-      userName: ['', [Validators.required]],
       userMail: ['', [Validators.required, Validators.email]],
       userPWD: ['', [Validators.required]]
     });
     this.authService.loginStatus$.subscribe((isLoggedIn: boolean) => {
       this.isLoggedIn = isLoggedIn;
     });
-  }
-  get userName() {
-    return this.loginForm.get('userName');
   }
 
   get userMail() {
@@ -51,92 +49,64 @@ export class LoginComponent {
     return this.loginForm.get('userPWD');
   }
 
-
-  autoCompleteUser() {
-    const userName = this.loginForm.get('userName')?.value;
-    console.log('usuario con el nombre:', userName);
-  
-    if (userName) {
-      this.getUserByUserName(userName).subscribe((users: any) => {
-        console.log('Usuarios encontrados:', users);
-  
-        if (users && users.length > 0) {
-          const user = users[0]; 
-          console.log('Usuario encontrado:', user); 
-          this.loginForm.patchValue({
-            userMail: user.email, 
-            userPWD: user.password || ''
-          });
+  checkIfUserExists() {
+    const email = this.userMail?.value;
+    if (this.userMail?.valid) {
+      this.authService.checkUserExists(email).then((exists: boolean) => {
+        if (exists) {
+          this.userNotFound = false;
+          this.showRegisterButton = false;
         } else {
-          console.log('Usuario no encontrado');
-          
-        
-      }
+          this.userNotFound = true;
+          this.showRegisterButton = true;
+        }
+      }).catch((error) => {
+        console.error('Error al verificar el correo:', error);
       });
     }
   }
-  
 
-  getUserByUserName(userName: string) {
-    console.log('Ejecutando consulta con userName:', userName);
-  
-    const userCollection = collection(this.firestore, 'users');
-    const userQuery = query(userCollection, where('firstName', '==', userName));
-    const result = collectionData(userQuery);
-    
-    result.subscribe({
-      next: (data: any) => console.log('Resultado de Firestore:', data),
-      error: (error: any) => console.error('Error en Firestore:', error)
-    });
-    
-    return result;
+  quickLogin() {
+    const savedUserMail = localStorage.getItem('savedUserMail');
+    if (savedUserMail) {
+      this.loginForm.patchValue({
+        userMail: savedUserMail,
+        userPWD: ''
+      });
+    } else {
+      console.log("No hay usuario guardado para 'Ingreso rápido'");
+    }
   }
-  
- 
-
-
   Login() {
-    
-    if (this.loginForm.valid) {
-      signInWithEmailAndPassword(this.auth, this.loginForm.value.userMail, this.loginForm.value.userPWD)
-        .then(async(res) => {
-          if (res.user.email !== null) {
-            const lastLogin = res.user.metadata?.lastSignInTime ? new Date(res.user.metadata.lastSignInTime) : null;
-          const formattedLoginTime = lastLogin 
-            ? `${lastLogin.toLocaleDateString()} ${lastLogin.toLocaleTimeString()}` 
-            : 'Fecha no disponible';
-            const userInfo = await this.authService.getUserInfoFromFirestore(res.user.email);
-          if (userInfo) {
-            const userData = { 
-              email: userInfo.email, 
-              firstName: userInfo.firstName, // Mantener el nombre existente
-              lastName: userInfo.lastName, // Mantener el apellido existente
-              lastLoginTime: formattedLoginTime // Solo actualizar la última hora de inicio de sesión
-            };
-            this.authService.updateUserInfo(userData).then(() => {
-              this.authService.updateLoginStatus(true);
-              this.router.navigate(['/home']);
-            });
-          }
-            this.userNotFound = false;
-          }
-        })
+    this.errorMessage = '';
+    if (this.loginForm.valid && !this.userNotFound) {
+      const { userMail, userPWD } = this.loginForm.value;
+      this.authService.login(userMail, userPWD)
+        .then(() => this.router.navigate(['/home']))
         .catch((e) => {
-          console.log("en catch "+e.code);
-          if (e.code === 'auth/invalid-credential') {
-            this.userNotFound = true;
-          }
+          console.log("---------- Login failed:    ", e);
+        if (e.code === 'auth/user-not-found') {
+          this.userNotFound = true;
+          this.errorMessage = 'El usuario no está registrado.';
+        } else if (e.code === 'auth/invalid-credential') {
+          this.errorMessage = 'Contraseña o Email incorrecto.';
+        } else {
+          this.errorMessage = 'Error en el inicio de sesión. Inténtalo de nuevo.';
+        }
         });
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 1500);
     }
   }
 
 
   Register() {
-    const userName = this.userName?.value;
-  const userMail = this.userMail?.value;
+    const userMail = this.userMail?.value;
+    localStorage.setItem('swapUserMail', userMail);
+    this.authService.setTempUserInfo(userMail).then(() => {
+      this.router.navigate(['/register']);
+    });
+  }
+  }
 
-  this.authService.setTempUserInfo(userMail, userName).then(() => {
-    this.router.navigate(['/register']);
-  });
-}
-}

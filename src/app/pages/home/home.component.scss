@@ -1,9 +1,56 @@
-.carousel-inner {
-  height: 400px;
+.card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px;
+  
 }
 
-.carousel-item img {
-  object-fit: cover; 
-  height: 15%;
-  width: 15%;
+.card {
+  margin: 15px;
+  width: 18rem;
+  height: 25rem; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between; 
+  border: none;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-img-top {
+    border-radius: 0.5rem;
+    width: 18rem;
+    height: 100%; 
+    object-fit: cover; 
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    flex-grow: 1; 
+    text-align: center;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .btn-custom {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #218838;
+    }
+  }
 }

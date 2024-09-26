@@ -5,11 +5,12 @@ import { HeaderComponent } from "./shared/header/header.component";
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { NavComponent } from './shared/nav/nav.component';
+import { ChatComponent } from './pages/chat/chat.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FooterComponent, HeaderComponent, LoginComponent, RegisterComponent, NavComponent],
+  imports: [RouterOutlet, FooterComponent, HeaderComponent, LoginComponent, RegisterComponent, NavComponent, ChatComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
