@@ -1,25 +1,31 @@
-
 <div class="chat-icon" (click)="toggleChat()">
-    <i class="fa fa-comments"></i> 
+  <i class="fa fa-comments"></i> 
+</div>
+
+<div class="chat-window" [ngClass]="{'open': isChatOpen}">
+  <div class="chat-header">
+    <h4>Chat</h4>
+    <button class="close-btn" (click)="toggleChat()">X</button>
   </div>
-  
- 
-  <div class="chat-window" [ngClass]="{'open': isChatOpen}">
-    <div class="chat-header">
-      <h4>Chat</h4>
-      <button class="close-btn" (click)="toggleChat()">X</button>
-    </div>
-    <div class="chat-body">
-        <div *ngFor="let msg of messages" class="message">
-            <span class="timestamp">{{ msg.timestamp?.toDate() | date: 'shortTime' }} - </span>     
-          <strong>{{ msg.senderName }}:</strong> {{ msg.message }}
-        </div>
-      </div>
-    <div class="chat-footer">
-      <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
-        <input formControlName="message" type="text" placeholder="Escribe un mensaje..." />
-        <button *ngIf="userLoginOn" type="submit">Enviar</button>
-      </form>
+
+  <div class="chat-body" #messageContainer>
+    <div *ngFor="let msg of messages" 
+         [ngClass]="{'message-right': msg.sender === user.email, 'message-left': msg.sender !== user.email}">
+      <!-- <span class="timestamp">{{ msg.timestamp?.toDate() | date: 'shortTime' }}</span>   -->
+      <span class="timestamp">{{ msg.timestamp?.toDate() | date: 'dd/MM/yyyy, HH:mm' }} - </span>
+
+    
+      <span class="message-content">{{ msg.message }}</span>
     </div>
   </div>
-  
+
+  <div class="chat-footer">
+    <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+      <input formControlName="message" type="text" placeholder="Escribe un mensaje..." />
+      <button *ngIf="userLoginOn" type="submit">Enviar</button>
+    </form>
+  </div>
+</div>
+
+
+

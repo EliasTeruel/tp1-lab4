@@ -1,4 +1,4 @@
-/* Icono flotante para el chat */
+
 .chat-icon {
     position: fixed;
     bottom: 20px;
@@ -22,7 +22,6 @@
     transform: scale(1.1);
   }
   
-  /* Ventana de chat */
   .chat-window {
     position: fixed;
     bottom: 20px;
@@ -42,6 +41,18 @@
   .chat-window.open {
     display: flex;
   }
+
+.message-left {
+  display: flex;
+  justify-content: flex-start;
+  padding: 5px;
+}
+
+.message-right {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
   
   .chat-header {
     background-color: #28a745;
@@ -75,6 +86,12 @@
     border-radius: 5px;
     margin-right: 10px;
   }
+  .message-content {
+    background-color: #f1f1f1;
+    padding: 8px 12px;
+    border-radius: 10px;
+    max-width: 70%;
+  }
   
   .chat-footer button {
     padding: 10px 15px;
@@ -83,6 +100,18 @@
     color: white;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  .message-right .message-content {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .timestamp {
+    font-size: 0.75rem;
+    color: gray;
+    margin-right: 8px;
+    align-self: flex-end;
   }
   
   .chat-footer button:hover {

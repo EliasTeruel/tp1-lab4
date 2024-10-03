@@ -106,13 +106,13 @@ async updateUserScore(email: string, points: number): Promise<void> {
     return userDoc.exists() ? userDoc.data() : null;
   }
 
-  // Función corregida para verificar si el usuario existe
+
   checkUserExists(email: string): Promise<boolean> {
-    const usersCollection = collection(this.firestore, 'users'); // Define la colección 'users'
-    const q = query(usersCollection, where('email', '==', email)); // Construye la consulta con where
+    const usersCollection = collection(this.firestore, 'users'); 
+    const q = query(usersCollection, where('email', '==', email)); 
 
     return getDocs(q).then(snapshot => {
-      return !snapshot.empty; // Si snapshot está vacío, el correo no existe
+      return !snapshot.empty;
     }).catch((error) => {
       console.error('Error al verificar si el usuario existe:', error);
       return false;

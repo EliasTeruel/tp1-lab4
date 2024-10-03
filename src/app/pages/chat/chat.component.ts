@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChatService } from '../../services/auth/chat/chat.service';
@@ -13,13 +13,15 @@ import { LoginService } from '../../services/auth/login.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
+
 export class ChatComponent implements OnInit {
   chatForm: FormGroup;
   userLoginOn: boolean = false;
   isChatOpen: boolean = false;
   messages: any[] = []; 
   user: any;
-
+  
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
   constructor(private fb: FormBuilder, 
     private chatService: ChatService, 
     private auth: Auth, private router: Router, 
@@ -33,7 +35,9 @@ export class ChatComponent implements OnInit {
   toggleChat() {
     this.isChatOpen = !this.isChatOpen;
   }
-
+  ngAfterViewChecked() {
+    this.scrollToBottom();  
+  }
   ngOnInit(): void {
     this.loginService.userInfo$.subscribe(user => {
       this.user = user;
@@ -75,6 +79,14 @@ export class ChatComponent implements OnInit {
   loadMessages() {
     this.chatService.getMessages().subscribe((messages: any) => {
       this.messages = messages; 
+      this.scrollToBottom();
     });
+  }
+  scrollToBottom(): void {
+    try {
+      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Error al hacer scroll al final:', err);
+    }
   }
 }

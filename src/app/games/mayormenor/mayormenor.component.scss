@@ -1,0 +1,72 @@
+.mayor-menor-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; 
+    background-color: #e3f2fd; 
+    font-family: 'Poppins', sans-serif;
+    color: #212121; 
+    padding: 20px; 
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem; 
+    color: #1e88e5; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+p {
+    font-size: 3rem; 
+    color: #1e88e5; 
+}
+
+.cartas img {
+    width: 250px; 
+    height: auto;
+    margin: 20px 0;
+}
+
+.botones {
+    margin: 20px 0;
+}
+
+.botones button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 1.5rem; 
+    background-color: #43a047; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease; 
+}
+
+.botones button:hover {
+    background-color: #388e3c;
+    transform: scale(1.1);
+}
+
+.mensaje-final {
+    margin-top: 20px;
+    font-size: 2rem;
+    color: #f44336; 
+}
+
+.mensaje-final button {
+    padding: 12px 25px;
+    background-color: #43a047; 
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.mensaje-final button:hover {
+    background-color: #388e3c;
+    transform: scale(1.05);
+}
