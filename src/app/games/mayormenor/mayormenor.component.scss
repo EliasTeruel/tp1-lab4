@@ -6,31 +6,50 @@
     min-height: 100vh; 
     background-color: #e3f2fd; 
     font-family: 'Poppins', sans-serif;
-    color: #212121; 
+    color: hsl(0, 0%, 13%); 
     padding: 20px; 
     text-align: center;
+    overflow: auto; 
+    max-width: 600px;
+    margin: 0 auto; 
+}
+
+
+.juego-container {
+    display: flex;
+    flex-direction: row; 
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap;
 }
 
 h1 {
-    font-size: 3rem; 
+    font-size: 2.5rem;
     color: #1e88e5; 
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 20px;
+    width: 100%; 
 }
-p {
-    font-size: 3rem; 
-    color: #1e88e5; 
+
+.cartas {
+    flex: 1; 
+    display: flex;
+    justify-content: center; 
+    margin: 20px;
 }
 
 .cartas img {
-    width: 250px; 
+    width: 100%;
+    max-width: 250px;
     height: auto;
-    margin: 20px 0;
 }
 
 .botones {
-    margin: 20px 0;
+    margin: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
 }
 
 .botones button {
@@ -52,8 +71,9 @@ p {
 
 .mensaje-final {
     margin-top: 20px;
-    font-size: 2rem;
+    font-size: 2rem; 
     color: #f44336; 
+    width: 100%; 
 }
 
 .mensaje-final button {
@@ -69,4 +89,17 @@ p {
 .mensaje-final button:hover {
     background-color: #388e3c;
     transform: scale(1.05);
+}
+
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem; 
+    }
+    .botones button {
+        font-size: 1.2rem; 
+    }
+    .mensaje-final {
+        font-size: 1.5rem; 
+    }
 }

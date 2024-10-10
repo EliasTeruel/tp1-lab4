@@ -21,34 +21,8 @@
   <div class="score-container">
     <div class="score">Score: {{ score }}</div>
     <button class="new-game" (click)="inicializarJuego()">Nuevo Juego</button>
-    <button class="new-game" (click)="mostrarRanking()">Mejores Puntuaciones</button>
     <div class="best-score">Best: {{ bestScore }}</div>
   </div>
 </div>
 
-<div class="ranking-table" *ngIf="rankingVisible">
-  <h2>Ranking de Puntuaciones</h2>
-  <button (click)="cerrarRanking()">Cerrar</button>
-  <table>
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Puntuación</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let score of ranking">
-        <td>{{ score.email }}</td>
-        <td>{{ score.score }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<!-- registro activo
-login auto completado y sin timer de error
 
-quien soy mas grande
-sacar bienvenida
-
-agrandar componentes
-fondo y estilos generales -->

@@ -70,8 +70,9 @@ export class LoginComponent {
     const savedUserMail = localStorage.getItem('savedUserMail');
     if (savedUserMail) {
       this.loginForm.patchValue({
-        userMail: savedUserMail,
-        userPWD: ''
+        // userMail: savedUserMail,
+        userMail: "g@gmail.com",
+        userPWD: '123456'
       });
     } else {
       console.log("No hay usuario guardado para 'Ingreso rápido'");

@@ -3,6 +3,7 @@ import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, collection, addDoc, doc, setDoc, getDoc, query, where, limit, getDocs } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { UserScore } from './user-score';
+import { ScoreService } from '../score.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,49 +15,14 @@ export class LoginService {
   private loginStatus = new BehaviorSubject<boolean>(false);
   loginStatus$ = this.loginStatus.asObservable();
 
-  constructor(private firestore: Firestore, private auth: Auth) {
+  constructor(private firestore: Firestore, private auth: Auth, private scoreService: ScoreService ) {
     this.auth.onAuthStateChanged(user => {
       this.updateLoginStatus(!!user);
     });
    }
 
  
-   async getUserScores(): Promise<UserScore[]> {
-    const scoresCollection = collection(this.firestore, 'scores');
-    const scoresSnapshot = await getDocs(scoresCollection);
-    const usersScores: UserScore[] = scoresSnapshot.docs.map(doc => doc.data() as UserScore);
-
-    console.log('Scores retrieved:', usersScores); // Agrega esto para depuración
-
-    return usersScores.filter(user => user["score"] !== undefined)
-                      .sort((a, b) => (b["score"] || 0) - (a["score"] || 0));
-}
-
-async saveUserScore(email: string, score: number): Promise<void> {
-  const scoreRef = doc(this.firestore, `scores/${email}`);
-  await setDoc(scoreRef, { email, score }, { merge: true });
-  console.log(`Puntaje de ${email} guardado: ${score}`);
-}
-
-async updateUserScore(email: string, points: number): Promise<void> {
- 
-
-  try {
-    const scoreRef = doc(this.firestore, `scores/${email}`);
-    const scoreDoc = await getDoc(scoreRef);
-
-    if (scoreDoc.exists()) {
-      const currentScore = scoreDoc.data()?.["score"] || 0;
-      await setDoc(scoreRef, { score: currentScore + points }, { merge: true });
-    } else {
-      await setDoc(scoreRef, { score: points });
-    }
-    console.log(`Score actualizado para ${email}: ${points} puntos.`);
-  } catch (error) {
-    console.error('Error al actualizar el score:', error);
-  }
-}
-
+   
 
    async login(userMail: string, userPWD: string): Promise<void> {
     try {
@@ -71,6 +37,9 @@ async updateUserScore(email: string, points: number): Promise<void> {
           : 'Fecha no disponible';
 
         const userInfo = await this.getUserInfoFromFirestore(res.user.email);
+        const scores = await this.scoreService.getUserScores();
+        const userScore = scores.find(score => score.email === userInfo.email)?.score || 0;
+        await this.scoreService.saveUserScore(userInfo.email, userScore);
 
         if (userInfo) {
           const userData = { 
@@ -80,13 +49,10 @@ async updateUserScore(email: string, points: number): Promise<void> {
             lastLoginTime: formattedLoginTime 
           };
 
-          const scores = await this.getUserScores();
-          const userScore = scores.find(score => score.email === userInfo.email)?.score || 0;
   
           await this.updateUserInfo(userData);
           this.updateLoginStatus(true);
 
-          await this.saveUserScore(userInfo.email, userScore);
         }
       }
     } catch (e) {

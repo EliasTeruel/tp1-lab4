@@ -1,97 +1,123 @@
-
 .ahorcado-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #e3f2fd; 
-    font-family: 'Poppins', sans-serif;
-    color: #212121;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  h1 {
-    font-size: 3rem;
-    color: #1e88e5;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-  }
-  
- 
-  .imagen-ahorcado img {
-    width: 250px;
-    height: auto;
-    margin-bottom: 20px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #e3f2fd; 
+  font-family: 'Poppins', sans-serif;
+  color: #212121;
+  padding: 20px;
+  text-align: center;
+  overflow: hidden; 
+}
 
-  .palabra {
-    font-size: 2.5rem;
-    letter-spacing: 1.5rem;
-    color: #424242;
-    text-transform: uppercase;
-    margin-bottom: 30px;
+h1 {
+  font-size: 2.5rem; 
+  color: #1e88e5;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px; 
+}
+
+.imagen-ahorcado img {
+  width: 100%; 
+  max-width: 200px; 
+  height: auto;
+  margin-bottom: 10px; 
+}
+
+.palabra {
+  font-size: 2rem;
+  letter-spacing: 1.5rem;
+  color: #424242;
+  text-transform: uppercase;
+  margin-bottom: 20px; 
+}
+
+.letras-incorrectas p,
+.intentos p {
+  font-size: 1.2rem; 
+  margin-top: 5px; 
+}
+
+.intentos p {
+  color: #43a047; 
+}
+
+.letras {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center; 
+  margin-top: 10px; 
+}
+
+.letras button {
+  padding: 8px 10px; 
+  background-color: #43a047; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 3px; 
+  font-size: 1.1rem; 
+  flex: 1 0 15%; 
+  max-width: 40px; 
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.letras button:hover {
+  background-color: #388e3c;
+  transform: scale(1.1);
+}
+
+.letras button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.mensaje-final {
+  display: none; 
+  margin-top: 20px;
+  font-size: 1.5rem; 
+  color: #f44336;
+  width: 100%;
+  opacity: 0; 
+  transition: opacity 0.5s ease;
+}
+
+.mensaje-final button {
+  padding: 8px 15px; 
+  background-color: #43a047;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.mostrar {
+  display: block;
+  opacity: 1;
+}
+
+.mensaje-final button:hover {
+  background-color: #388e3c;
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  h1 {
+      font-size: 2rem; 
   }
-  
-  
-  .letras-incorrectas p {
-    font-size: 1.5rem;
-    color: #ff7043;
-    margin-top: 10px;
+  .imagen-ahorcado img {
+      max-width: 150px; 
   }
-  
- 
-  .intentos p {
-    font-size: 1.3rem;
-    color: #43a047;
-    margin-top: 10px;
-  }
-  
-  
   .letras button {
-    padding: 10px 20px;
-    background-color: #43a047; 
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px;
-    font-size: 1.5rem;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+      font-size: 1rem; 
+      max-width: 35px; 
   }
-  
-  .letras button:hover {
-    background-color: #388e3c;
-    transform: scale(1.1);
+  .mensaje-final {
+      font-size: 1.2rem; 
   }
-  
-  .letras button:disabled {
-    background-color: #bdbdbd;
-    cursor: not-allowed;
-  }
-  
-  
-  .mensaje-final p {
-    font-size: 2rem;
-    color: #f44336;
-    margin: 20px 0;
-  }
-  
-  .mensaje-final button {
-    padding: 12px 25px;
-    background-color: #43a047;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  
-  .mensaje-final button:hover {
-    background-color: #388e3c;
-    transform: scale(1.05);
-  }
-  
+}

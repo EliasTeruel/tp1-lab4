@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../services/auth/login.service';
+import { ScoreService } from '../../services/score.service';
 
 @Component({
   selector: 'app-juego2048',
@@ -20,18 +21,22 @@ export class Juego2048Component {
   ranking: any[] = []; 
   rankingVisible: boolean = false; 
 
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService, private scoreService: ScoreService) {
     this.inicializarJuego();
     this.mostrarRanking();
   }
 
   async mostrarRanking() {
-    this.ranking = await this.loginService.getUserScores();
+    this.ranking = await this.scoreService.getUserScores();
     this.rankingVisible = true; 
     console.log('Ranking visible:', this.rankingVisible); 
 }
 
-
+// async mostrarRanking() {
+//   this.ranking = await this.scoreService.getScores().toPromise();
+//   this.rankingVisible = true; 
+//   console.log('Ranking visible:', this.ranking); 
+// }
 
   cerrarRanking() {
     this.rankingVisible = false; 
@@ -216,6 +221,12 @@ export class Juego2048Component {
         if (j < 3 && this.board[i][j] === this.board[i][j + 1]) return false;
       }
     }
+
+//    this.scoreService.saveScore(this.score).then(() => {
+    console.log('Puntuación guardada:', this.score);
+  //}).catch(error => {
+    //console.error('Error al guardar la puntuación:', error);
+ // });
     return true;
   }
 }

@@ -4,7 +4,7 @@
   justify-content: center;
   flex-wrap: wrap;
   margin: 20px;
-  
+  background-color: aliceblue;
 }
 
 .card {
@@ -16,6 +16,7 @@
   justify-content: space-between; 
   border: none;
   transition: transform 0.2s;
+  background-color: aliceblue;
 
   &:hover {
     transform: scale(1.05);

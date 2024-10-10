@@ -1,5 +1,6 @@
 <div class="chat-icon" (click)="toggleChat()">
-  <i class="fa fa-comments"></i> 
+  <img src="assets/images/chat-svg.svg" alt="Chat Icon" />
+  <!-- <i class="fa fa-comments"></i>  -->
 </div>
 
 <div class="chat-window" [ngClass]="{'open': isChatOpen}">
@@ -11,10 +12,13 @@
   <div class="chat-body" #messageContainer>
     <div *ngFor="let msg of messages" 
          [ngClass]="{'message-right': msg.sender === user.email, 'message-left': msg.sender !== user.email}">
-      <!-- <span class="timestamp">{{ msg.timestamp?.toDate() | date: 'shortTime' }}</span>   -->
-      <span class="timestamp">{{ msg.timestamp?.toDate() | date: 'dd/MM/yyyy, HH:mm' }} - </span>
+      <span *ngIf="msg.sender !== user.email" class="timestamp">
+        {{ msg.timestamp?.toDate() | date: 'dd/MM/yyyy, HH:mm' }} - {{ msg.senderName }}:
+      </span>
 
-    
+      <span *ngIf="msg.sender === user.email" class="timestamp">
+        {{ msg.timestamp?.toDate() | date: 'dd/MM/yyyy, HH:mm' }}
+      </span>
       <span class="message-content">{{ msg.message }}</span>
     </div>
   </div>
@@ -26,6 +30,4 @@
     </form>
   </div>
 </div>
-
-
 

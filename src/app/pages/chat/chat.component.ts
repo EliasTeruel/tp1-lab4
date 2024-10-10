@@ -13,7 +13,6 @@ import { LoginService } from '../../services/auth/login.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-
 export class ChatComponent implements OnInit {
   chatForm: FormGroup;
   userLoginOn: boolean = false;

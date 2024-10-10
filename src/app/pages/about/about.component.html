@@ -1,4 +1,4 @@
-<div class="card mb-3" style="max-width: 540px">
+<div class="card mb-3 card-custom">
   <div class="row g-0">
     <div class="col-md-4">
       <img src="/avatar.png" class="img-fluid rounded-start" alt="Avatar" />
@@ -9,7 +9,11 @@
         <p class="card-text">Nombre: {{ userInfo?.firstName }}</p>
         <p class="card-text">Apellido: {{ userInfo?.lastName }}</p>
         <p class="card-text">Email: {{ userInfo?.email }}</p>
-        <p class="card-text">Ultimo Ingreso: {{ userInfo?.lastLoginTime }}</p>
+        <p class="card-text">Último Ingreso: {{ userInfo?.lastLoginTime }}</p>
+        <p class="card-text">Fecha Actual: {{ currentDate | date: 'short' }}</p>
+        <p class="card-text">Puntaje: {{ userInfo?.score }}</p>
+
+        <p class="card-text">Posición en el Ranking: {{ userRank > 0 ? userRank : 'No disponible' }}</p>
       </div>
     </div>
   </div>
