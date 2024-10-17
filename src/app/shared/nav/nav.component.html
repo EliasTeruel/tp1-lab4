@@ -39,6 +39,22 @@
             >Quien Soy</a
           >
         </li>
+        <li *ngIf="userLoginOn" class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/puntajes"
+            routerLinkActive="active-route"
+            >Puntajes</a
+          >
+        </li>
+        <li *ngIf="userLoginOn" class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/encuesta"
+            routerLinkActive="active-route"
+            >Encuesta</a
+          >
+        </li>
 
         <li *ngIf="!userLoginOn" class="nav-item">
           <a

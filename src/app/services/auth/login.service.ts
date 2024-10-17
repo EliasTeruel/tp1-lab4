@@ -37,9 +37,8 @@ export class LoginService {
           : 'Fecha no disponible';
 
         const userInfo = await this.getUserInfoFromFirestore(res.user.email);
-        const scores = await this.scoreService.getUserScores();
+        const scores = await this.scoreService.getUserScores(res.user.email);
         const userScore = scores.find(score => score.email === userInfo.email)?.score || 0;
-        await this.scoreService.saveUserScore(userInfo.email, userScore);
 
         if (userInfo) {
           const userData = { 
@@ -72,19 +71,19 @@ export class LoginService {
     return userDoc.exists() ? userDoc.data() : null;
   }
 
-
-  checkUserExists(email: string): Promise<boolean> {
+  async checkUserExists(email: string): Promise<boolean> {
     const usersCollection = collection(this.firestore, 'users'); 
     const q = query(usersCollection, where('email', '==', email)); 
-
-    return getDocs(q).then(snapshot => {
+    try {
+      const snapshot = await getDocs(q);
       return !snapshot.empty;
-    }).catch((error) => {
+    } catch (error) {
       console.error('Error al verificar si el usuario existe:', error);
       return false;
-    });
+    }
   }
   
+
 
   async updateUserInfo(user: { email: string; firstName?: string; lastName?: string }) {
     if (!user.email) {
@@ -126,3 +125,5 @@ export class LoginService {
   }
   
 }
+
+

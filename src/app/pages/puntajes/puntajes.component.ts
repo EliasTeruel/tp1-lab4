@@ -1,23 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { ScoreService  } from '../../services/score.service';
+import { Component } from '@angular/core';
+import { ScoreService } from '../../services/score.service';
 import { LoginService } from '../../services/auth/login.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-about',
+  selector: 'app-puntajes',
   standalone: true,
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss'],
-  imports: [CommonModule]
+  imports: [FormsModule, CommonModule],
+  templateUrl: './puntajes.component.html',
+  styleUrl: './puntajes.component.scss'
 })
-export class AboutComponent implements OnInit {
+export class PuntajesComponent {
   userInfo: any;
+  ranking: any[] = [];
   userScore: number = 0;
   userRank: number = 0;
-  currentDate: Date = new Date();
-  game: string = 'MayorMenor';
-  ranking: any[] = []; 
-  rankingVisible: boolean = false; 
+  rankingVisible: boolean = false;
+  game: string = 'Juego 2048';
+
 
 
   constructor(private scoreService: ScoreService, private authService: LoginService) { }
@@ -33,7 +34,6 @@ export class AboutComponent implements OnInit {
   }
 
 
-  
   async loadUserScoreAndRank() {
     try {
       const email = localStorage.getItem('savedUserMail') || '';

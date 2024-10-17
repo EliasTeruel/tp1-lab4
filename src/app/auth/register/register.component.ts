@@ -21,7 +21,6 @@ export class RegisterComponent {
   flagError: boolean = false;
   msjError: string = "";
   isLoading: boolean = false;
-  //loginForm: FormGroup;
   isLoggedIn: boolean = false;
   firstName: string = "";
   lastName: string = "";
@@ -58,13 +57,13 @@ export class RegisterComponent {
     });
   }
 
-  get userMail() {
-    return this.registerForm.get('newUserMail');
-  }
+  // get userMail() {
+  //   return '';
+  // }
 
-  get userPWD() {
-    return this.registerForm.get('newUserPWD');
-  }
+  // get userPWD() {
+  //   return '';
+  // }
 
 
 

@@ -19,10 +19,8 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this.authService.loginStatus$.subscribe((isLoggedIn: boolean) => {
-      console.log("userLoginOn: " + this.userLoginOn);
 
       this.userLoginOn = isLoggedIn;
-      console.log("userLoginOn: " + this.userLoginOn);
 
     });
   }

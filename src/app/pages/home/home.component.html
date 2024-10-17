@@ -1,5 +1,4 @@
-<!-- <app-header></app-header>
-<app-nav></app-nav> -->
+
 <div class="card-container">
   <div class="card" style="width: 18rem;">
     <img src="/ahorcado.png" class="card-img-top" alt="ahorcado">
@@ -33,4 +32,19 @@
     </div>
   </div>
 </div>
-<!-- <app-chat></app-chat> -->
+
+<div class="modal fade" #alertModal tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertModalLabel">Aviso</h5>
+      </div>
+      <div class="modal-body">
+        <p>Por favor, inicie sesión para jugar.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

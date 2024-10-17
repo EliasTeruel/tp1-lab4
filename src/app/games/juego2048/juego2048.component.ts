@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../services/auth/login.service';
 import { ScoreService } from '../../services/score.service';
+import { UserScore } from '../../services/auth/user-score';
 
 @Component({
   selector: 'app-juego2048',
@@ -16,30 +17,16 @@ export class Juego2048Component {
   ];
 
   score: number = 0;
+  userScore: number = 0;
   bestScore: number = 0;
+  mensajeFinal: string = '';
 
   ranking: any[] = []; 
   rankingVisible: boolean = false; 
 
   constructor(private loginService: LoginService, private scoreService: ScoreService) {
     this.inicializarJuego();
-    this.mostrarRanking();
-  }
-
-  async mostrarRanking() {
-    this.ranking = await this.scoreService.getUserScores();
-    this.rankingVisible = true; 
-    console.log('Ranking visible:', this.rankingVisible); 
-}
-
-// async mostrarRanking() {
-//   this.ranking = await this.scoreService.getScores().toPromise();
-//   this.rankingVisible = true; 
-//   console.log('Ranking visible:', this.ranking); 
-// }
-
-  cerrarRanking() {
-    this.rankingVisible = false; 
+    this.loadUserScores();
   }
 
   inicializarJuego() {
@@ -54,6 +41,21 @@ export class Juego2048Component {
     this.addNewTile();
   }
 
+  
+  async loadUserScores() {
+    const email = localStorage.getItem('savedUserMail');
+    if (email) {
+      try {
+        const userScores = await this.scoreService.getUserScores(email);
+        const gameScore = userScores.find((g: UserScore) => g['game'] === 'Juego 2048');
+        if (gameScore) {
+          this.bestScore = gameScore.score;
+        }
+      } catch (error) {
+        console.error('Error al cargar la puntuación:', error);
+      }
+    }
+  }
   addNewTile() {
     let emptyCells: { x: number, y: number }[] = [];
 
@@ -121,7 +123,7 @@ export class Juego2048Component {
         if (boardChanged) {
           this.addNewTile();
           if (this.checkGameOver()) {
-            alert('Game Over');
+            this.mensajeFinal = "Perdiste!";
           }
         }
       }, 300);
@@ -129,11 +131,8 @@ export class Juego2048Component {
   }
 
 
+
   combine(rowOrCol: number[]) {
-
-
-
-
     for (let i = 0; i < rowOrCol.length - 1; i++) {
       if (rowOrCol[i] !== 0 && rowOrCol[i] === rowOrCol[i + 1]) {
         rowOrCol[i] *= 2;
@@ -141,11 +140,30 @@ export class Juego2048Component {
         this.score += rowOrCol[i];
       }
     }
-    if (this.score > this.bestScore) {
-      this.bestScore = this.score;
-    }
+    this.updateBestScore();
     return rowOrCol;
   }
+
+  async updateBestScore() {
+    if (this.score > this.bestScore) {
+      this.bestScore = this.score;
+      const email = localStorage.getItem('savedUserMail');
+      const game = 'Juego 2048';
+      const date = new Date().toISOString();
+
+      if (email) {
+        try {
+          await this.scoreService.saveOrUpdateGameScore(email, this.bestScore, game);
+
+
+          console.log('Puntaje máximo actualizado');
+        } catch (error) {
+          console.error('Error al actualizar el puntaje:', error);
+        }
+      }
+    }
+  }
+
 
   slide(rowOrCol: number[]) {
     const nonZeroTiles = rowOrCol.filter(tile => tile !== 0);
@@ -213,6 +231,7 @@ export class Juego2048Component {
     return boardChanged;
   }
 
+
   checkGameOver() {
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 4; j++) {
@@ -221,12 +240,22 @@ export class Juego2048Component {
         if (j < 3 && this.board[i][j] === this.board[i][j + 1]) return false;
       }
     }
-
-//    this.scoreService.saveScore(this.score).then(() => {
-    console.log('Puntuación guardada:', this.score);
-  //}).catch(error => {
-    //console.error('Error al guardar la puntuación:', error);
- // });
+    this.saveCurrentScore();
     return true;
+  }
+
+  async saveCurrentScore() {
+    const email = localStorage.getItem('savedUserMail');
+    const game = 'Juego 2048';
+    const date = new Date().toISOString();
+
+    if (email) {
+      try {
+        await this.scoreService.saveOrUpdateGameScore(email, this.score, game);
+        console.log('Puntuación guardada:', this.score);
+      } catch (error) {
+        console.error('Error al guardar la puntuación:', error);
+      }
+    }
   }
 }

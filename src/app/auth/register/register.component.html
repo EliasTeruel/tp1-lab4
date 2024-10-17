@@ -26,35 +26,63 @@
             </div>
           </div>
 
-          <input
+          <!-- <input
             formControlName="newUserMail"
             class="form-control my-2"
             [class.is-invalid]="userMail?.invalid && (userMail?.dirty || userMail?.touched)"
             placeholder="Correo electrónico"
+          /> -->
+          <input
+            formControlName="newUserMail"
+            class="form-control my-2"
+            placeholder="Correo electrónico"
           />
-          <div *ngIf="userMail?.invalid && (userMail?.dirty || userMail?.touched)" class="invalid-feedback">
+          <div class="invalid-feedback">
+            <div required>
+              El correo electrónico es obligatorio.
+            </div>
+            <div email>
+              Ingrese un correo electrónico válido.
+            </div>
+          </div>
+          <!-- <div *ngIf="userMail?.invalid && (userMail?.dirty || userMail?.touched)" class="invalid-feedback"></div>
             <div *ngIf="userMail?.errors?.['required']">
               El correo electrónico es obligatorio.
             </div>
             <div *ngIf="userMail?.errors?.['email']">
               Ingrese un correo electrónico válido.
             </div>
-          </div>
+          </div> -->
         </div>
         
         <div class="form-group">
-          <input
+          <!-- <input
             formControlName="newUserPWD"
             type="password"
             class="form-control my-2"
             [class.is-invalid]="userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)"
             placeholder="Contraseña"
+          /> -->
+          <input
+            formControlName="newUserPWD"
+            type="password"
+            class="form-control my-2"
+            
+            placeholder="Contraseña"
           />
-          <div *ngIf="userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)" class="invalid-feedback">
+          <!-- <div *ngIf="userPWD?.invalid && (userPWD?.dirty || userPWD?.touched)" class="invalid-feedback">
             <div *ngIf="userPWD?.errors?.['required']">
               La contraseña es obligatoria.
             </div>
             <div *ngIf="userPWD?.errors?.['minlength']">
+              La contraseña debe tener al menos 6 caracteres.
+            </div>
+          </div> -->
+          <div  class="invalid-feedback">
+            <div required>
+              La contraseña es obligatoria.
+            </div>
+            <div minlength>
               La contraseña debe tener al menos 6 caracteres.
             </div>
           </div>

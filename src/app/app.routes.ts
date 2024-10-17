@@ -4,11 +4,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { RegisterComponent } from './auth/register/register.component';
-// import { AhorcadoComponent } from './games/ahorcado/ahorcado.component';
-// import { MayorOMenorComponent } from './games/mayor-o-menor/mayor-o-menor.component';
-// import { PreguntadosComponent } from './games/preguntados/preguntados.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AboutComponent } from './pages/about/about.component';
+import { PuntajesComponent } from './pages/puntajes/puntajes.component';
+import { EncuestaComponent } from './pages/encuesta/encuesta.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -17,6 +16,8 @@ export const routes: Routes = [
   { path: 'logout', component: LogoutComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'puntajes', component: PuntajesComponent },
+  { path: 'encuesta', component: EncuestaComponent },
   { path: 'about', component: AboutComponent },
 
   {

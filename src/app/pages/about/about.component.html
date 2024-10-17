@@ -11,8 +11,7 @@
         <p class="card-text">Email: {{ userInfo?.email }}</p>
         <p class="card-text">Último Ingreso: {{ userInfo?.lastLoginTime }}</p>
         <p class="card-text">Fecha Actual: {{ currentDate | date: 'short' }}</p>
-        <p class="card-text">Puntaje: {{ userInfo?.score }}</p>
-
+        <p class="card-text">Puntaje: {{ userScore }}</p>
         <p class="card-text">Posición en el Ranking: {{ userRank > 0 ? userRank : 'No disponible' }}</p>
       </div>
     </div>

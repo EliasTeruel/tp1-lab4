@@ -1,5 +1,8 @@
+
 export interface UserScore {
-    email: string;
-    score?: number;
-    [key: string]: any; 
-}
+    game: string;
+    score: number;
+    date: string;
+    email?: string; 
+  }
+  

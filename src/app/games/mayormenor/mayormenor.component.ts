@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartasService } from '../../services/game.service';
+import { UserScore } from '../../services/auth/user-score';
+import { ScoreService } from '../../services/score.service';
 
 @Component({
   selector: 'app-mayormenor',
@@ -14,12 +16,29 @@ export class MayormenorComponent implements OnInit {
   deckId: string = '';
   mensajeFinal: string = '';
   score: number = 0;
+  bestScore: number = 0;
 
-  constructor(private cartasService: CartasService) { }
+  constructor(private cartasService: CartasService, private scoreService: ScoreService) { }
   ngOnInit(): void {
     this.iniciarJuego();
-  }
+    this.loadUserScores();
 
+  }
+  async loadUserScores() {
+    const email = localStorage.getItem('savedUserMail');
+    if (email) {
+      try {
+        const userScores = await this.scoreService.getUserScores(email);
+        const gameScore = userScores.find((g: UserScore) => g['game'] === 'MayorMenor');
+
+        if (gameScore) {
+          this.bestScore = gameScore.score;
+        }
+      } catch (error) {
+        console.error('Error al cargar la puntuación:', error);
+      }
+    }
+  }
   iniciarJuego(): void {
     this.cartasService.crearMazo().subscribe(data => {
       if (data && data.deck_id) {
@@ -66,12 +85,49 @@ export class MayormenorComponent implements OnInit {
           this.cartas.push(cartaSiguiente);
           this.cartaActual = cartaSiguiente;
           this.mensajeFinal = '';
+          this.updateBestScore();
         } else {
           this.mensajeFinal = 'Perdiste! La carta era: ' + cartaSiguiente.value;
+          this.saveCurrentScore();
         }
       });
     } else {
       this.mensajeFinal = 'Ganaste! Has llegado al final.';
+    }
+  }
+  async saveCurrentScore() {
+    const email = localStorage.getItem('savedUserMail');
+    const game = 'MayorMenor';
+    const date = new Date().toISOString();
+
+    if (email) {
+      try {
+        await this.scoreService.saveOrUpdateGameScore(email, this.score, game);
+
+        console.log('Puntuación guardada:', this.score);
+      } catch (error) {
+        console.error('Error al guardar la puntuación:', error);
+      }
+    }
+  }
+
+  async updateBestScore() {
+    if (this.score > this.bestScore) {
+      this.bestScore = this.score;
+      const email = localStorage.getItem('savedUserMail');
+      const game = 'MayorMenor';
+      const date = new Date().toISOString();
+
+      if (email) {
+        try {
+          await this.scoreService.saveOrUpdateGameScore(email, this.bestScore, game);
+
+
+          console.log('Puntaje máximo actualizado');
+        } catch (error) {
+          console.error('Error al actualizar el puntaje:', error);
+        }
+      }
     }
   }
 

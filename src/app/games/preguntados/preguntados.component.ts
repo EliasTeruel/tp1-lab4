@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SimpsonsService  } from '../../services/poke.service';
 import { forkJoin } from 'rxjs';
+import { ScoreService } from '../../services/score.service';
+import { UserScore } from '../../services/auth/user-score';
 
 @Component({
   selector: 'app-preguntados',
@@ -16,25 +18,65 @@ export class PreguntadosComponent implements OnInit {
   loading: boolean = true;
   lives: number = 3;
   gameOverMessage: string | null = null;
+  bestScore: number = 0;
 
-  constructor(private  simpsonsService: SimpsonsService) {}
+
+  constructor(private  simpsonsService: SimpsonsService, private scoreService: ScoreService) {}
 
   ngOnInit() {
     this.loadNewCharacter();
+    this.loadUserScores();
+
   }
 
+  async loadUserScores() {
+    const email = localStorage.getItem('savedUserMail');
+    if (email) {
+      try {
+        const userScores = await this.scoreService.getUserScores(email);
+        const gameScore = userScores.find((g: UserScore) => g['game'] === 'preguntados');
+
+        if (gameScore) {
+          this.bestScore = gameScore.score;
+        }
+      } catch (error) {
+        console.error('Error al cargar la puntuación:', error);
+      }
+    }
+  }
+  
   loadNewCharacter() {
     this.loading = true;
     this.gameOverMessage = null;
-    this.simpsonsService.getRandomCharacter().subscribe(data => {
-      const characterData = data[0];
-      this.character = characterData;
-      this.correctAnswer = characterData.character; 
-      this.generateOptions(characterData.character);
-      this.selectedAnswer = null;
-    }, () => {
-      this.loading = false; 
-    });
+
+    this.fetchUniqueCharacters();
+  }
+
+  fetchUniqueCharacters() {
+    this.simpsonsService.getRandomCharacters(4).subscribe(
+      (characters) => {
+        const uniqueCharacters = this.getUniqueOptions(characters);
+
+        if (uniqueCharacters.length < 4) {
+          this.fetchUniqueCharacters();
+        } else {
+          this.options = uniqueCharacters.map((c) => c[0].character);
+          this.character = uniqueCharacters[Math.floor(Math.random() * 4)][0];
+          this.correctAnswer = this.character.character;
+          this.selectedAnswer = null;
+          this.loading = false;
+        }
+      },
+      () => {
+        this.loading = false;
+      }
+    );
+  }
+
+  getUniqueOptions(characters: any[]): any[] {
+    const uniqueMap = new Map();
+    characters.forEach((char) => uniqueMap.set(char[0].character, char));
+    return Array.from(uniqueMap.values()); 
   }
 
   generateOptions(correctName: string) {
@@ -50,11 +92,12 @@ export class PreguntadosComponent implements OnInit {
     return array.sort(() => Math.random() - 0.5); 
   }
 
-  checkAnswer(selectedOption: string) {
+  async checkAnswer(selectedOption: string) {
     this.selectedAnswer = selectedOption;
 
     if (selectedOption === this.correctAnswer) {
       this.score++;
+      await this.saveBestScore();
     } else {
       this.lives--; 
     }
@@ -63,8 +106,38 @@ export class PreguntadosComponent implements OnInit {
     if (this.lives <= 0) {
       this.gameOverMessage = `Perdiste! la puntuación fue: ${this.score}`;
       this.selectedAnswer = null;
+      await this.saveCurrentScore();
+
     } else {
       setTimeout(() => this.loadNewCharacter(), 2000); 
+    }
+  }
+  async saveBestScore() {
+    const email = localStorage.getItem('savedUserMail');
+    if (email && this.score > this.bestScore) {
+      this.bestScore = this.score;
+      try {
+        await this.scoreService.saveOrUpdateGameScore(email, this.bestScore, 'preguntados');
+        console.log('¡Nueva mejor puntuación guardada!');
+      } catch (error) {
+        console.error('Error al guardar la mejor puntuación:', error);
+      }
+    }
+  }
+
+  async saveCurrentScore() {
+    const email = localStorage.getItem('savedUserMail');
+    const game = 'preguntados';
+    const date = new Date().toISOString();
+
+    if (email) {
+      try {
+        await this.scoreService.saveOrUpdateGameScore(email, this.score, game);
+
+        console.log('Puntuación guardada:', this.score);
+      } catch (error) {
+        console.error('Error al guardar la puntuación:', error);
+      }
     }
   }
 
@@ -72,5 +145,8 @@ export class PreguntadosComponent implements OnInit {
     this.score = 0; 
     this.lives = 3;
     this.loadNewCharacter(); 
+    this.saveCurrentScore();
   }
 }
+
+

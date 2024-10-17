@@ -25,6 +25,7 @@
   <ng-container *ngIf="lives > 0">
     <h3>Puntuación: {{ score }}</h3>
     <h4>Vidas: {{ lives }}</h4>
+    <div class="best-score">Best: {{ bestScore }}</div>
   </ng-container>
   
   <div *ngIf="gameOverMessage">

@@ -42,11 +42,7 @@ export class ChatComponent implements OnInit {
       this.user = user;
       console.log('Información del usuario logueado:', this.user);
       this.loginService.loginStatus$.subscribe((isLoggedIn: boolean) => {
-        console.log("userLoginOn: " + this.userLoginOn);
-  
         this.userLoginOn = isLoggedIn;
-        console.log("userLoginOn: " + this.userLoginOn);
-  
       });
     });
     this.auth.onAuthStateChanged((user: any) => {
